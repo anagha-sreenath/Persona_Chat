@@ -41,3 +41,12 @@ source venv/bin/activate  # On Windows: venv\Scripts\activate
 
 # Install dependencies
 pip install -r requirements.txt
+
+## 👤 Creator
+
+**Anagha Sreenath**  
+🔗 [GitHub](https://github.com/anagha-sreenath)  
+🔗 [LinkedIn](https://www.linkedin.com/in/anagha-sreenath-52453432b/)
+
+This is a personality-based chatbot built using the Gemini API as part of my mini-project.  
+It allows users to interact with different conversational styles in real-time.

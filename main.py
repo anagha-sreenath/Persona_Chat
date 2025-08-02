@@ -1,53 +1,72 @@
+from flask import Flask, render_template, request, jsonify
+from personality_responses import get_response
+import json
 import os
-from dotenv import load_dotenv
-import google.generativeai as genai
-from personalities import personality_prompts
+from datetime import datetime
 
-# Load your API key from .env
-load_dotenv()
-genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
+app = Flask(__name__)
 
-def ask_gemini(user_input, personality_style):
-    try:
-        # Get the personality's prompt
-        personality_prompt = personality_prompts.get(
-            personality_style,
-            "You are a helpful assistant."
-        )
+# 🧠 In-memory chat history (reset on server restart)
+chat_history = []
 
-        # Combine personality prompt and user message
-        full_prompt = f"{personality_prompt}\n\nUser: {user_input}"
+# 📝 Path to save history (persistent)
+HISTORY_FILE = "chat_history.jsonl"
 
-        # Use Gemini 1.5 Flash — free tier model
-        model = genai.GenerativeModel("models/gemini-1.5-flash")
+# 👤 Creator Info
+CREATOR_INFO = {
+    "name": "Anagha Sreenath",
+    "linkedin": "https://www.linkedin.com/in/anagha-sreenath",  # change to your actual profile
+    "github": "https://github.com/anagha-sreenath",             # change to your actual repo
+    "project": "Personality-Based AI Chatbot"
+}
 
-        # Generate a response
-        response = model.generate_content(full_prompt)
+@app.route('/')
+def home():
+    return render_template('index.html')  # make sure index.html exists in templates folder
 
-        return response.text.strip()
+@app.route('/chat', methods=['POST'])
+def chat():
+    data = request.get_json()
+    user_input = data.get("message")
+    personality = data.get("personality")
+    name = data.get("name", "Anonymous")  # Optional: user name
 
-    except Exception as e:
-        return f"⚠️ Oops! Something went wrong: {e}"
+    # 🧠 Generate AI response
+    response = get_response(personality, user_input)
 
-# Run the chatbot
-if __name__ == "__main__":
-    print("👋 Welcome to the Personality Chat App!")
-    print("Available Personalities:")
-    for style in personality_prompts:
-        print(f" - {style}")
+    # 🕒 Timestamp
+    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
-    selected = input("\nChoose a personality: ").strip().lower()
+    # 📜 Record the conversation
+    entry = {
+        "timestamp": timestamp,
+        "name": name,
+        "personality": personality,
+        "user_input": user_input,
+        "bot_response": response
+    }
+    chat_history.append(entry)
 
-    if selected not in personality_prompts:
-        print("⚠️ Invalid personality selected. Exiting.")
-        exit()
+    # 💾 Save to file
+    with open(HISTORY_FILE, "a", encoding="utf-8") as file:
+        file.write(json.dumps(entry) + "\n")
 
-    print(f"\n💬 Chatting in '{selected}' mode! Type 'exit' to quit.\n")
+    return jsonify({"response": response})
 
-    while True:
-        msg = input("You: ")
-        if msg.lower() in ["exit", "quit"]:
-            print("Bot: See ya! 💻👋")
-            break
-        reply = ask_gemini(msg, selected)
-        print(f"Bot ({selected}): {reply}\n")
+@app.route('/history', methods=['GET'])
+def history():
+    return jsonify(chat_history)
+
+@app.route('/about')
+def about():
+    return jsonify({
+        "creator": CREATOR_INFO["name"],
+        "linkedin": CREATOR_INFO["linkedin"],
+        "github": CREATOR_INFO["github"],
+        "project": CREATOR_INFO["project"],
+        "message": f"This AI chatbot project was created by {CREATOR_INFO['name']} using Flask and Python. It supports 20 personalities and stores chat history."
+    })
+
+if __name__ == '__main__':
+    # Runs the server
+    app.run(debug=True)

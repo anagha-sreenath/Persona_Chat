@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>PersonaChat</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f9f9f9;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            color: #333;
+        }
+        .chat-box {
+            width: 100%;
+            max-width: 700px;
+            margin: auto;
+            background: #fff;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .message {
+            margin: 10px 0;
+        }
+        select, input[type="text"], button {
+            padding: 10px;
+            font-size: 16px;
+            margin: 5px 0;
+            width: 100%;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 14px;
+            color: #666;
+        }
+        .footer a {
+            color: #007BFF;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="chat-box">
+        <h1>PersonaChat</h1>
+        <label>Select a Personality:</label>
+        <select id="personality">
+            <!-- Dynamically filled via JS -->
+        </select>
+
+        <label>Your Message:</label>
+        <input type="text" id="message" placeholder="Type your message here..." />
+        <button onclick="sendMessage()">Send</button>
+
+        <div id="chat-log"></div>
+    </div>
+
+    <div class="footer">
+        Created with ❤️ by <strong>Anagha Sreenath</strong> |
+        <a href="https://github.com/anagha-sreenath" target="_blank">GitHub</a> |
+        <a href="https://linkedin.com/in/anagha-sreenath-52453432b" target="_blank">LinkedIn</a>
+    </div>
+
+    <script>
+        const personalities = [
+            "Gen Z", "Funny", "Formal", "Gamer", "Sassy", "Poetic", "Philosopher", "Caring",
+            "Sarcastic", "Minimalist", "Shakespearean", "K-Drama Lead", "Tech Bro",
+            "Anime Fan", "Emo", "Wholesome", "Mystical", "Pet Lover", "Old Soul", "AI Enthusiast"
+        ];
+        const select = document.getElementById("personality");
+        const chatLog = document.getElementById("chat-log");
+
+        personalities.forEach(p => {
+            const option = document.createElement("option");
+            option.value = p;
+            option.textContent = p;
+            select.appendChild(option);
+        });
+
+        async function sendMessage() {
+            const personality = select.value;
+            const message = document.getElementById("message").value;
+            const response = await fetch("/chat", {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({ personality, message })
+            });
+            const data = await response.json();
+            const userMsg = `<div class="message"><strong>You:</strong> ${message}</div>`;
+            const botMsg = `<div class="message"><strong>${personality} Bot:</strong> ${data.response}</div>`;
+            chatLog.innerHTML += userMsg + botMsg;
+            document.getElementById("message").value = "";
+        }
+    </script>
+</body>
+</html>
