@@ -1,52 +1,37 @@
-# 🤖 PersonaChat – Personality-based AI Chatbot
+# FlowIQ - Personality Chat App
 
-PersonaChat is a real-time AI chatbot that responds in different personalities like Gen Z, formal, or funny. Built using **Flask**, **HTML/CSS/JS**, and powered by **Google Gemini API**, it simulates natural conversations in multiple tones based on the selected user mood or persona.
-
----
+A free-to-use, real-time personality-based chatbot app built with Flask. Choose from 20 unique personalities — including Gen Z, Formal, Comedian, and more — and have dynamic conversations powered by intelligent responses.
 
 ## ✨ Features
 
-- 🎭 Select a chatbot personality (Gen Z, Funny, Formal, etc.)
-- 💬 Real-time chatting experience
-- ⚡ Uses **Google Gemini Free API**
-- 🌐 Lightweight Flask web server
-- 📱 Responsive web UI
+- 🧠 20 different chatbot personalities
+- 💬 Real-time, interactive chat
+- 📝 Chat history saved in browser
+- 🎭 Personality-specific responses
+- 🌐 Fully responsive web app
+- 🧑‍💻 Backend using Python Flask
+- 💻 Frontend using HTML, CSS, JS
+- 🔗 Free API (Google Gemini or equivalent)
+- 📱 Accessible via browser or phone
 
----
+## 🔧 Technologies Used
 
-## 📸 Demo Screenshot
+- Python (Flask)
+- HTML, CSS, JavaScript
+- Google Gemini API (or HuggingFace)
+- JSON for dynamic response generation
 
-![PersonaChat UI](path/to/screenshot.png) <!-- Replace with your screenshot image path -->
-
----
-
-## 🚀 Getting Started (Run Locally)
-
-### Prerequisites
-
-- Python 3.8+
-- Git
-- Google Gemini API Key (free)
-
-### 🔧 Installation
-
-```bash
-# Clone the repository
-git clone https://github.com/yourusername/PersonaChat.git
-cd PersonaChat
-
-# Create virtual environment
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-
-# Install dependencies
-pip install -r requirements.txt
-
-## 👤 Creator
+## 👩‍💻 Created By
 
 **Anagha Sreenath**  
-🔗 [GitHub](https://github.com/anagha-sreenath)  
-🔗 [LinkedIn](https://www.linkedin.com/in/anagha-sreenath-52453432b/)
+[🔗 GitHub](https://github.com/anaghasreenath) | [🔗 LinkedIn](https://www.linkedin.com/in/anaghasreenath/)
 
-This is a personality-based chatbot built using the Gemini API as part of my mini-project.  
-It allows users to interact with different conversational styles in real-time.
+I created this project as part of my college mini-project, to build a unique, user-personality-driven chatbot that goes beyond static bots. I'm always exploring how tech can be more personalized, accessible, and fun!
+
+## 🚀 How to Run Locally
+
+```bash
+git clone https://github.com/anaghasreenath/personality_chat_app.git
+cd personality_chat_app
+pip install flask
+python main.py
