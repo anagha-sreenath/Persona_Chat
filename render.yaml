@@ -2,9 +2,8 @@ services:
   - type: web
     name: persona-chat
     env: python
-    buildCommand: ""
-    startCommand: python app.py
-    repo: https://github.com/anagha-sreenath/Persona_Chat.git
-    branch: main
-    plan: free
-    envVars: []
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app
+    envVars:
+      - key: GEMINI_API_KEY
+        sync: false
